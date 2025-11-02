@@ -31,11 +31,9 @@ namespace AuthBackend.Services
                 using (var cmd = new SqlCommand(spQuery, connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-
-                    // ✅ Use 'await' with ExecuteReaderAsync
+                     
                     using (var reader = await cmd.ExecuteReaderAsync())
-                    {
-                        // ✅ Use 'await' inside while condition
+                    { 
                         while (await reader.ReadAsync())
                         {
                             tasks.Add(new TaskEntity
@@ -52,8 +50,7 @@ namespace AuthBackend.Services
                                     : reader.GetDateTime("DueDate")
                             });
                         }
-
-                        // Read response message/result
+                         
                         if (await reader.NextResultAsync() && await reader.ReadAsync())
                         {
                             var message = reader["Message"]?.ToString();
@@ -95,8 +92,7 @@ namespace AuthBackend.Services
                     cmd.Parameters.AddWithValue("@Id", id);
 
                     using (var reader = await cmd.ExecuteReaderAsync())
-                    {
-                        // First result: task data (if exists)
+                    { 
                         if (await reader.ReadAsync())
                         {
                             task = new TaskEntity
@@ -109,8 +105,7 @@ namespace AuthBackend.Services
                                 DueDate = reader.IsDBNull("DueDate") ? (DateTime?)null : reader.GetDateTime("DueDate")
                             };
                         }
-
-                        // Second result: message & code
+                         
                         if (await reader.NextResultAsync() && await reader.ReadAsync())
                         {
                             var message = reader["Message"]?.ToString();
@@ -153,8 +148,7 @@ namespace AuthBackend.Services
 
                     TaskEntity? savedTask = null;
                     using (var reader = await cmd.ExecuteReaderAsync())
-                    {
-                        // First result: inserted task
+                    { 
                         if (await reader.ReadAsync())
                         {
                             savedTask = new TaskEntity
@@ -167,8 +161,7 @@ namespace AuthBackend.Services
                                 DueDate = reader.IsDBNull("DueDate") ? (DateTime?)null : reader.GetDateTime("DueDate")
                             };
                         }
-
-                        // Second result: message
+                         
                         if (await reader.NextResultAsync() && await reader.ReadAsync())
                         {
                             var message = reader["Message"]?.ToString();
@@ -212,8 +205,7 @@ namespace AuthBackend.Services
 
                     TaskEntity? updatedTask = null;
                     using (var reader = await cmd.ExecuteReaderAsync())
-                    {
-                        // First result: updated task
+                    { 
                         if (await reader.ReadAsync())
                         {
                             updatedTask = new TaskEntity
@@ -226,8 +218,7 @@ namespace AuthBackend.Services
                                 DueDate = reader.IsDBNull("DueDate") ? (DateTime?)null : reader.GetDateTime("DueDate")
                             };
                         }
-
-                        // Second result: message
+                         
                         if (await reader.NextResultAsync() && await reader.ReadAsync())
                         {
                             var message = reader["Message"]?.ToString();
@@ -301,7 +292,7 @@ namespace AuthBackend.Services
             {
                 using (var connection = new SqlConnection(_connectionString))
                 {
-                    await connection.OpenAsync(); // Will throw if connection fails
+                    await connection.OpenAsync(); 
 
                     using (var cmd = new SqlCommand(spQuery, connection))
                     {
@@ -324,8 +315,7 @@ namespace AuthBackend.Services
                         }
                     }
                 }
-
-                // No row returned
+                 
                 return new LoginResponse
                 {
                     IsValid = false,
@@ -334,8 +324,7 @@ namespace AuthBackend.Services
                 };
             }
             catch (SqlException ex)
-            {
-                // Log SQL-specific errors (very helpful!)
+            { 
                 Console.WriteLine($"SQL Error: {ex.Number} - {ex.Message}");
                 Console.WriteLine($"Stack Trace: {ex.StackTrace}");
 

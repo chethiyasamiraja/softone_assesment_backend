@@ -17,24 +17,21 @@ namespace AuthBackend.Controllers
         {
             _taskService = taskService;
         }
-
-        // GET: api/tasks
+         
         [HttpGet]
         public async Task<ActionResult<Responses<List<TaskEntity>>>> GetAll()
         {
             var response = await _taskService.GetAllTasksAsync();
             return Ok(response);
         }
-
-        // GET: api/tasks/5
+         
         [HttpGet("{id}")]
         public async Task<ActionResult<Responses<TaskEntity>>> GetById(int id)
         {
             var response = await _taskService.GetTaskByIdAsync(id);
             return response.Succeeded ? Ok(response) : NotFound(response);
         }
-
-        // POST: api/tasks
+         
         [HttpPost]
         public async Task<ActionResult<Responses<TaskEntity>>> Create([FromBody] TaskEntity task)
         {
@@ -51,8 +48,7 @@ namespace AuthBackend.Controllers
             var response = await _taskService.CreateTaskAsync(task);
             return response.Succeeded ? CreatedAtAction(nameof(GetById), new { id = response.Data?.Id }, response) : BadRequest(response);
         }
-
-        // PUT: api/tasks/5
+         
         [HttpPut("{id}")]
         public async Task<ActionResult<Responses<TaskEntity>>> Update(int id, [FromBody] TaskEntity task)
         {
@@ -69,8 +65,7 @@ namespace AuthBackend.Controllers
             var response = await _taskService.UpdateTaskAsync(id, task);
             return response.Succeeded ? Ok(response) : NotFound(response);
         }
-
-        // DELETE: api/tasks/5
+         
         [HttpDelete("{id}")]
         public async Task<ActionResult<Responses<bool>>> Delete(int id)
         {
